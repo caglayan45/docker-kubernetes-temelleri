@@ -594,19 +594,19 @@ Probe'ların **Success**, **Failure** ve **Unknown** olmak üzere 3 return'ü va
 **Httpgetaction:** Container'a http isteği gerçekleştirme
 
 [DockerHub]: <https://hub.docker.com/search?q=&type=image>
-[Init Containers]: <>
-[Selectors]: <>
-[Multi Containers]: <>
-[DeamonSet]: <>
-[StatefulSet]: <>
-[Job]: <>
-[CronJob]: <>
-[RollingUpdate]: <>
-[Blue-Green Deployment]: <>
-[ClusterIP]: <>
-[NodePort]: <>
-[LoadBalancer]: <>
-[Volumes]: <>
-[ConfigMaps]: <>
-[Secrets]: <>
-[Liveness Probe]: <>
+[Init Containers]: <https://github.com/caglayan45/docker-kubernetes-temelleri/tree/main/Init%20Containers>
+[Selectors]: <https://github.com/caglayan45/docker-kubernetes-temelleri/tree/main/Selectors>
+[Multi Containers]: <https://github.com/caglayan45/docker-kubernetes-temelleri/tree/main/Multi%20Containers%20Pods>
+[DeamonSet]: <https://github.com/caglayan45/docker-kubernetes-temelleri/tree/main/DaemonSet>
+[StatefulSet]: <https://github.com/caglayan45/docker-kubernetes-temelleri/tree/main/StatefulSet>
+[Job]: <https://github.com/caglayan45/docker-kubernetes-temelleri/tree/main/Job>
+[CronJob]: <https://github.com/caglayan45/docker-kubernetes-temelleri/tree/main/CronJob>
+[RollingUpdate]: <https://github.com/caglayan45/docker-kubernetes-temelleri/tree/main/Rolling%20Updates>
+[Blue-Green Deployment]: <https://github.com/caglayan45/docker-kubernetes-temelleri/tree/main/Blue-Green%20Deployments>
+[ClusterIP]: <https://github.com/caglayan45/docker-kubernetes-temelleri/tree/main/ClusterIP>
+[NodePort]: <https://github.com/caglayan45/docker-kubernetes-temelleri/tree/main/NodePort>
+[LoadBalancer]: <https://github.com/caglayan45/docker-kubernetes-temelleri/tree/main/Load%20Balancer>
+[Volumes]: <https://github.com/caglayan45/docker-kubernetes-temelleri/tree/main/Volumes>
+[ConfigMaps]: <https://github.com/caglayan45/docker-kubernetes-temelleri/tree/main/ConfigMaps>
+[Secrets]: <https://github.com/caglayan45/docker-kubernetes-temelleri/tree/main/Secrets>
+[Liveness Probe]: <https://github.com/caglayan45/docker-kubernetes-temelleri/tree/main/LivenessProbe>
