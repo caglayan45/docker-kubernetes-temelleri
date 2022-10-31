@@ -235,7 +235,7 @@ Services altında kullanımı (volume tanımlama);
 
 ## 6-Contariner Registry ve DockerHub
 
-####Container Registry Nedir?
+#### Container Registry Nedir?
 
 Container'lar için merkezi depodur (central repositories).
 Private ya da Public olarak kullanılabilir.
