@@ -1,10 +1,10 @@
 # DOCKER VE KUBERNETES TEMELLERİ
----
+
 Merhaba, bu repo Docker ve Kubernetes'e giriş düzeyinde temel kavramları, temel komutları ve örnek uygulamaları içermektedir.
 
 
 # Docker
----
+
 #### Docker Nedir?
 Docker en net tanımlamayla open source bir ‘container’ teknolojisidir. Aynı işletim sistemi üzerinde, yüzlerce hatta binlerce birbirinden izole ve bağımsız containerlar sayesinde sanallaştırma sağlayan bir teknolojidir. Web uygulamalarımızın kolayca kurulumunu, testini, çalışmasını ve deploymentını sağlar. Bunun yanında sunucu maliyetlerini önemli ölçüde azaltır.
 
@@ -19,7 +19,7 @@ Docker Daemon tarafından Linux çekirdeği içerisinde birbirinden izole olarak
 Containerlar layer halindeki Image’lardan oluşur. Docker Image ise containerlara kurulacak ve run edilecek olan uygulamaların veya OS’lerin image dosyalarıdır. Örnek verecek olursak mysql, mongodb, redis, ubuntu, mariadb.. Yüzlercesi mevcut. [DockerHub]'dan imageleri görebilirsiniz.
 
 ## 1-Temel Komutlar
----
+
 
 Tüm docker image’lerini listeler
 >docker images
@@ -261,16 +261,16 @@ docker rmi csancaktar/express:v1
 docker pull csancaktar/express:v1
 
 # Kubernetes (K8s)
----
+
 Sıkça "buluta yönelik işletim sistemi" olarak tanımlanan Kubernetes, containerize edilmiş uygulama ve hizmet kümelerini yönetmek amacıyla tasarlanmış, açık kaynaklı bir platformdur. Google tarafından GO dilinde geliştirilmiş Cloud Native Computing Foundation tarafından desteklenen mevcut konteyner haline getirilmiş uygulamalarınızı otomatik deploy etmek, sayılarını arttırıp azaltmak gibi işlemler ile birlikte yönetmenizi sağlayan bir Konteyner kümeleme (container cluster) aracıdır. Master (Control Plane) ve Nodes (Workers) yapısı vardır. 
 
 ## Cluster
----
+
 
 Cluster, belirli bir konfigürasyon ile yapılandırılmış olan, aynı amaç doğrultusunda beraber ya da yedekli şekilde çalışan sunucu kümelerine verilen isimdir. Kubernetes'in en büyük bileşenidir. Node'lar birliği olarak da ifade edilebilir. Bundan anlaşıldığı üzere Node'lar (Master ve Workers) Cluster içerisinde yer alır.
 
 ## Master Node
----
+
 
 Cluster'ın kontrol merkezi olarak düşünülebilir. Tüm cluster’ı yönetmekten, izlemekten, değişiklikler yapmaktan ve oluşan olaylara cevap vermekten sorumludur. Nodelar ise esas işi yapan bileşenlerdir. Yaptıkları işleri, durumlarını masterlara sürekli olarak iletirler. Master Node ile api server (kube-apiserver) üzerinden haberleşilir. Restful API JSON ile manifest(konfigürasyon) dosyaları Master Node’a iletilir. Birçok bileşenden oluşur, bunlar; kube-apiserver, etcd, kube-controller-manager ve kube-scheduler'dır.
 
@@ -291,7 +291,7 @@ Bu bileşen kubernetes sistemine verilen manifest dosyası ile desired state ded
 Organizatör de denebilir. Bu servis işlemlerin zamanlaması için kullanılır ve nodelara görevler atar. Belirlenen pod’un hangi node üzerinde çalıştırılacağına karar verme mekanizmasıdır. Kubelet’i harekete geçirerek, ilgili olan pod ve içerisinde yer alan konteyner oluşturulmuş olur.
 
 ## Worker Nodes
----
+
 
 Cluster'da yer alan gerçek makinelere verilen isimdir. Kubernetes ekosisteminde iş yüklerinin çalıştığı yerlerdir. Master Node'dan gelen direktiflere göre işlemleri gerçekleştirirler. Kubelet, Container engine ve kube-proxy (load balancer) bileşenleri worker'lar üzerinde çalışır. 
 
@@ -308,7 +308,7 @@ Container engine container yönetiminden sorumludur. Containerların başlatılm
 Bu bileşen kubernetes network’ünden sorumludur. Pod IP adreslerini yönetir, load balancingden sorumludur. Kubernetes'de pod içerisindeki tüm container'lar tek IP yi paylaşırlar.
 
 ## Pod
----
+
 Kubernetes sisteminde ki en atomik computing birimi Podlardır. Bunları sanallaştırma ekosisteminde ki sanal makinalar, docker ekosisteminde ki containerlar olarak düşünebilirsiniz. Nodelar ve Masterlar podları host etmek ve organize etmek için vardır. Docker için container ne ise K8s için Pod odur. Her Pod’un bir IP’si vardır. K8s Pod’ların içinde Container’lar çalıştırır. 1 Pod yalnızca 1 Node üzerinde çalışabilir.
 
 <u>Pod Durumları (Pod State);</u>
@@ -349,19 +349,19 @@ Pod’ların bilgilerini listeler
 >kubectl exec -it [podName] -- sh/bash
 
 ## Init Containers
----
+
 Declarative yaml içerisinde bulunur, Pod'lar oluşmadan önce init containerlar oluşur ve Pod'ların ayağa kalkabilmesi için gerekli bağlantı testi vb. kontrolleri sağlarlar. [Init Containers] içerisinde örnek kullanımı mevcuttur.
 
 ## Selectors
----
+
 Key-Value yapısıyla çalışır. Objelerinizi ya da kaynaklarınızı gruplamak ve tanımlamak için onlara etiket (label) ataması yapmanızı sağlar. Örnek kullanıma [Selectors]'den ulaşılabilir.
 
 ## Multi Containers Pods
----
+
 Pod'lar içerisinde birden fazla container kullanımı da mevcuttur. [Multi Containers] kısmında örnek kullanım mevcuttur.
 
 ## ReplicaSet
----
+
 Pod'ların replica larını oluşturur (yaml içerisinde 3 replica bilgisi verildiyse, aynı anda Pod'dan 3 adet oluşur), herhangi bir pod crash olup ya da herhangi bir sebepten dolayı durduğunda, silindiğinde replicaset sayesinde K8S tarafından otomatik olarak yeniden oluşturulur.
 
 ReplicaSet yaratır
@@ -378,7 +378,7 @@ Silme komutu, birisi yaml adı parametresiyle diğeri de replicaSet name paramet
 kubectl delete rs [replicaSetName]
 
 ## Deployments
----
+
 Deployment ReplicaSet’in yanında rolling update yapma imkanı veren ilgili podu ve replica sayılarını belirttiğimiz bir Kubernetes objesidir. Deployment oluşturduğunda, arka planda replicaset oluşturur fakat bu replicaset'lerle direkt olarak etkileşimde bulunulamaz. Birden fazla ReplicaSet kullanabildiği için de rolling update yapma şansına sahiptir. Aynı şekilde bir önceki versiyona rollback yapma imkanı da verir. Her Mikroservis için bir deployment oluşturulur. Örnek olarak 3 replica’lı bir deploymenti 5 replicaya da çıkartabiliriz ya da 2 replicaya da düşürebiliriz. Hatta çeşitli metrikler dinleyerek auto-scaling yeteneği de kazandırabiliriz.
 Rolling update için örnek kullanım [RollingUpdate] kısmında verilmiştir.
 Blue-Green deployment senaryosu için örnek kullanım [Blue-Green Deployment] kısmında verilmiştir.
@@ -413,22 +413,22 @@ Deploymentları yaml ismi ya da deployment ismi yazarak kaldırır
 kubectl delete deploy [deploymentName]
 
 ## DeamonSet
----
+
 DeamonSet'ler tanımlandığında yaml'da belirtilen podu, tüm node'larda ya da selector ile seçilmiş belirli node'larda ayağa kaldırır, bu selector'e dahil olacak şekilde yeni bir node eklendiğinde bu pod otomatik olarak orada da ayağa kalkacaktır. Tolerans ile master node harici tüm nodlarda çalış şeklinde konfigürasyon verilebilir. Örnek kullanımı [DeamonSet] kısmında mevcuttur.
 
 
 ## StatefulSet
----
+
 Örnek kullanım [StatefulSet] kısmında verilmiştir.
 
 ## Job ve CronJob
----
+
 Job bir ya da birden fazla Pod'un belirli bir işi belirli bir tekrarda yapacağı işlemler Job olarak tanımlanır. Örnek kullanım [Job] kısmında verilmiştir.
 
 CronJob ise periyodik bir şekilde çalışacak, yapılacak işlemler için kullanılır. Örnek kullanım [CronJob] kısmında verilmiştir.
 
 ## Services
----
+
 Servisler ClusterIP, NodePort ve LoadBalancer olarak kullanılırlar. Pod'lara erişme yoludur. Pod'ların IP'si güvenilmez ve sağlıksızdır fakat servislerin IP leri tam tersi güvenilir ve sağlıklı çalışır. Pod'ların aksine statik ip adresleri, statik DNS isimleri vardır. **[serviceName].[namespace].svc.cluster.local** ile ulaşılabilir.
 
 ### ClusterIP
@@ -465,7 +465,7 @@ Yaml dosyasından deploy edilmiş servisi siler
 LoadBalancer aslında bulut sürümlerine has bir servis. Örnek kullanım [LoadBalancer] kısmında verilmiştir.
 
 ## Volumes
----
+
 Persistant Volume (**PV**):
 Kaynaklar (dosya ve klasörleriniz) için depo sunar. Cluster tarafında kullanılabilir. 
 
@@ -529,7 +529,7 @@ Yaml dosyası ismi yazılan PV,SC ya da PVC'leri siler
 >kubectl delete pvc [pvcName]
 
 ## ConfigMaps
----
+
 Configmap, uygulamalarımızda kullandığımız konfigürasyonların dışarıda bir noktaya konularak tek noktadan kolayca yönetilmesine olanak sağlayan bir kubernetes objesidir. Key-Value yapısıyla çalışır. Yaml dosyaları ya da text dosyaları olarak ya da dosyalama (klasörler ve dosyalar) sistemi olarak oluşturulabilir. ConfigMap dosyalarında, herhangi bir değişiklik yapıldığında, container'lar restart edilene kadar değişikikler uygulanmaz. Örnek volume kullanımı [ConfigMaps] kısmında verilmiştir.
 
 Imperative yol ile configmap oluşturma
@@ -554,7 +554,7 @@ Configmap'leri listeler
 >kubectl delete -f [cm.yaml]
 
 ## Secrets
----
+
 Parola, kullanıcı adı, token gibi bilgileri güvenli bir şekilde depolayacağınız alan Secret’tır. Burada depoladığımız bilgilere verdiğimiz isimle uygulamamız içinde kullanabiliriz. Secret ConfigMaps'e benzer ancak özel olarak gizli verileri tutmayı amaçlar. Hem ConfigMaps hem de Secret, verileri bir anahtar değer (key, value) çifti olarak depolar. En önemli fark, Secret’ın verileri base64 biçiminde depolamasıdır, ConfigMaps'in ise verileri düz metin olarak depolamasıdır. Anahtarlar, parolalar, hizmet hesapları kimlik bilgileri, db bağlantı dizesi vb. gibi bazı kritik verileriniz varsa, her zaman Secret’ı tercih etmelisiniz. Örnek volume kullanımı [Secrets] kısmında verilmiştir.
 
 Imperative yol ile secret oluşturma
@@ -574,7 +574,7 @@ Secret'ları listeler
 kubectl delete secrets [secretName]
 
 ## Probes
----
+
 Podların  durumlarını takip edebilmek için kullanılan yapı.
 
 <u>**Startup Probe;**</u>
