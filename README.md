@@ -419,7 +419,7 @@ DeamonSet'ler tanımlandığında yaml'da belirtilen podu, tüm node'larda ya da
 
 ## StatefulSet
 
-Örnek kullanım [StatefulSet] kısmında verilmiştir.
+Sıralama ve benzersizlik garantileri sunan Pod controller’ıdır. Deployment emri, persistent data veya stabil ağ bağlantısına ihtiyaç duyulduğunda daha hassas kontrole ihtiyaç duyulduğunda kullanılırlar. Örnek kullanım [StatefulSet] kısmında verilmiştir.
 
 ## Job ve CronJob
 
