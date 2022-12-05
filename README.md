@@ -10,7 +10,7 @@ Docker en net tanımlamayla open source bir ‘container’ teknolojisidir. Ayn�
 
 
 #### Docker Daemon Nedir?
-Hypervisor’ün dockerdaki karşılığıdır. Bütün CPU, RAM vb. gibi işletim sistemine ait işlerin yapıldığı bölümdür.
+Hypervisor’ün dockerdaki karşılığıdır. Bütün CPU, RAM vb. gibi işletim sistemine ait işlerin yapıldığı bölümdür. (Hypervisor, sanal makinelerin oluşturulması, çalıştırılması ve düzenlenmesi konusunda gerekli olan bir sanal makine görüntüleyici yazılımıdır. )
 
 #### Docker Container Nedir?
 Docker Daemon tarafından Linux çekirdeği içerisinde birbirinden izole olarak çalıştırılan process’lerin her birine verilen isimdir. Virtual Machine (Sanal Makina) analojisinde Docker’ı Hypervisor’e benzetirsek fiziksel sunucu üzerinde halihazırda koşturulmakta olan her bir işletim sisteminin (sanal sunucunun) Docker’daki karşılığı Container’dır.
@@ -101,12 +101,12 @@ Environment Variable (Değişken) oluşturmak için kullanılan bir komuttur. Ke
 >ENV key value
 
 Örnek Dockerfile:
->FROM alpine
-RUN apk add -update nodes nodejs-npm
-COPY . /src
-WORKDIR /src
-EXPOSE 8080
-ENTRYPOUNT [“node”, “./app.js”]
+>FROM alpine<br>
+RUN apk add -update nodes nodejs-npm<br>
+COPY . /src<br>
+WORKDIR /src<br>
+EXPOSE 8080<br>
+ENTRYPOINT [“node”, “./app.js”]
 
 ## 3-Volumes
 Volume’lar lokaldeki klasörü, container içerisindeki bir mantıksal klasör ile eşler. Container’larda kalıcı dosya saklamaya yarar.
@@ -194,43 +194,43 @@ Container (servis) oluşmadan önce çalışacak komutlar yazılır
 
 Sunucu ya da container’ların koştuğu makine restart olduğunda ya da kapatılıp açıldığında servislerin tekrar çalıştırılmasını ya da çalışmamasını belirlediğimiz kısımdır.
 Aynı zamanda hataya düştüğünde tekrar çalıştırılsın ya da durdurulmadığı sürece çalışsın şeklinde seçenekler de mevcut.
->restart: always
-restart: no
-restart: on-failure
-restart: unless-stopped
+>restart: always (Container'lar hangi şartlarda durursa dursun restart eder.)<br>
+restart: no (Container'lar otomatik olarak yeniden başlamaz.)<br>
+restart: on-failure (Container sıfırdan farklı bir return ile çıktıysa ve maksimum deneme sayısı geçilmediyse container'ı restart eder.)<br>
+restart: unless-stopped (Container, kullanıcı ya da docker daemon tarafından durdurulmadıysa restart eder.)
 
 Alt kısımda belirtilen servis üzerinde çalışmasını gerektiğini belirtir, önce belirtilen servis ayağa kalkar.
->depends_on:
-   - db
+>depends_on:<br>
+  - db
 
 Değişken tanımlayabildiğimiz, değer atayabildiğimiz ve compose ile servisleri ayağa kaldırırken “docker compose up -d -e DEBUG=0“ şeklinde dışarıdan parametre geçebilmemizi sağlar.
->environment:
-  - DEBUG=1
+>environment:<br>
+  - DEBUG=1<br>
   - TESTENV=testValue
 
 Servisin çalışacağı portun ve dışarıdan ulaşılacak portun belirlediği kısım (sol taraftaki dışarıdan ulaşacağımız port, sağ taraftaki de container'ın uygulamasının çalışacağı port numarasıdır).
->ports:
+>ports:<br>
   - “8080:80”
 
 2 kısımda kullanılabilir, bir servis altında ilgili servisin hangi network’de çalışması isteniyorsa ilgili network adı verilerek, bir de services altında network’leri tanımlamak amacıyla
 Servis altında kullanımı;
->networks:
+>networks:<br>
   - frontend
 
 Services altında kullanımı (network tanımlama);
->networks:
-  frontend:
+>networks:<br>
+  frontend:<br>
   backend:
 
 2 kısımda kullanılabilir, bir servis altında ilgili serviste bir volume ataması (mapping) yapılmak isteniyorsa ilgili volume adı verilerek, bir de services altında volume’leri tanımlamak amacıyla
 Servis altında kullanımı;
->volumes:(lokal yol belirterek volume ataması)
-  - ./db:/etc/data
-volumes:(tanımlanmış bir volume ataması)
+>volumes:(lokal yol belirterek volume ataması)<br>
+  - ./db:/etc/data<br>
+volumes:(tanımlanmış bir volume ataması)<br>
   - db-data:/etc/data
 
 Services altında kullanımı (volume tanımlama);
->volumes:
+>volumes:<br>
   db-data:
 
 ## 6-Contariner Registry ve DockerHub
@@ -255,9 +255,9 @@ Docker Hub'dan image çekme
 >docker pull [imageName]:latest
 
 Docker Hub Örnek Pushlama;
->docker build -t csancaktar/express:v1 .
-docker push csancaktar/express:v1
-docker rmi csancaktar/express:v1
+>docker build -t csancaktar/express:v1 .<br>
+docker push csancaktar/express:v1<br>
+docker rmi csancaktar/express:v1<br>
 docker pull csancaktar/express:v1
 
 # Kubernetes (K8s)
@@ -374,7 +374,7 @@ ReplicaSet hakkında bilgi verir
 >kubectl describe rs [replicaSetName]
 
 Silme komutu, birisi yaml adı parametresiyle diğeri de replicaSet name parametresiyle
->kubectl delete -f [definition.yaml]
+>kubectl delete -f [definition.yaml]<br>
 kubectl delete rs [replicaSetName]
 
 ## Deployments
@@ -384,7 +384,7 @@ Rolling update için örnek kullanım [RollingUpdate] kısmında verilmiştir.
 Blue-Green deployment senaryosu için örnek kullanım [Blue-Green Deployment] kısmında verilmiştir.
 
 Imperative ve Declarative deploy oluşturma
->kubectl create deploy [deploymentName] --image=[imageName] --replicas=3 --port=80
+>kubectl create deploy [deploymentName] --image=[imageName] --replicas=3 --port=80<br>
 kubectl apply -f [definition.yaml]
 
 Deployment'ları listeler
@@ -409,7 +409,7 @@ Deployment'a yapılan güncellemenin durumunu gösterir
 >kubectl rollout undo [deploymentName] --to-revision=[revision]
 
 Deploymentları yaml ismi ya da deployment ismi yazarak kaldırır
->kubectl delete -f [definition.yaml]
+>kubectl delete -f [definition.yaml]<br>
 kubectl delete deploy [deploymentName]
 
 ## DeamonSet
@@ -570,7 +570,7 @@ Secret'ları listeler
 >kubectl get secrets [secretName] -o YAML
 
 İsmi yazılan ya da yaml dosyası yazılan secret'ı siler
->kubectl delete -f [secret.yaml]
+>kubectl delete -f [secret.yaml]<br>
 kubectl delete secrets [secretName]
 
 ## Probes
