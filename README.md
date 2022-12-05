@@ -98,7 +98,7 @@ Image çalıştırıldığında bu komut aracığıyla spesifik olarak verilen k
 
 Environment Variable (Değişken) oluşturmak için kullanılan bir komuttur. Key – Value şeklinde kullanılır, iki çeşit kullanımı vardır.
 >ENV key=value
-ENV key value
+>ENV key value
 
 Örnek Dockerfile:
 >FROM alpine
