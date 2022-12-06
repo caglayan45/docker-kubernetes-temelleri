@@ -18,120 +18,152 @@ Docker Daemon tarafından Linux çekirdeği içerisinde birbirinden izole olarak
 #### Docker Image Nedir?
 Containerlar layer halindeki Image’lardan oluşur. Docker Image ise containerlara kurulacak ve run edilecek olan uygulamaların veya OS’lerin image dosyalarıdır. Örnek verecek olursak mysql, mongodb, redis, ubuntu, mariadb.. Yüzlercesi mevcut. [DockerHub]'dan imageleri görebilirsiniz.
 
-## 1-Temel Komutlar
+## Temel Komutlar
 
 
 Tüm docker image’lerini listeler
->docker images
-
+```shell
+docker images
+```
 Container’ı istenilen isim ile ayağa kaldırır
->docker run -it —name [containerName] [imageName]
-
+```shell
+docker run -it —name [containerName] [imageName]
+```
 Container’ı istenilen isim ve istenilen port bağdaştırarak ayağa kaldırır
->docker run -it -p 8080:80 —name [containerName] [imageName]
-
+```shell
+docker run -it -p 8080:80 —name [containerName] [imageName]
+```
 Çalışan container’ları listeler
->docker ps
-
+```shell
+docker ps
+```
 Tüm containerları listeler
->docker ps -a
-
+```shell
+docker ps -a
+```
 Tüm container’ların sadece container id bilgisini listeler
->docker ps -aq
-
+```shell
+docker ps -aq
+```
 İsmi ya da id bilgisi yazılmış olan conatiner’ı çalıştırır
->docker start [containerName / containerId]
-
+```shell
+docker start [containerName / containerId]
+```
 Tüm container’ları çalıştırır
->docker start $(docker ps -aq)
-
+```shell
+docker start $(docker ps -aq)
+```
 İsmi ya da id bilgisi yazılmış olan conatiner’ı durdurur
->docker stop [containerName / containerId]
-
+```shell
+docker stop [containerName / containerId]
+```
 Tüm container’ları durdurur
->docker stop $(docker ps -aq)
-
+```shell
+docker stop $(docker ps -aq)
+```
 Container’ı siler
->docker rm [containerName]
-
+```shell
+docker rm [containerName]
+```
 Image’i siler
->docker rmi [imageName]
-
+```shell
+docker rmi [imageName]
+```
 Tüm image’leri siler
->docker rmi $(docker images -aq)
-
+```shell
+docker rmi $(docker images -aq)
+```
 Tüm container’ları siler
->docker rm $(docker ps -aq)
-
+```shell
+docker rm $(docker ps -aq)
+```
 Komut çalıştırıldığı anda hiçbir container tarafından kullanılmayan image’leri siler
->docker system prune -a
-
+```shell
+docker system prune -a
+```
 Çalışan container’ın içerisine girmemizi sağlar
->docker exec -it [containerName] bash
-
-## 2-Dockerfile
+```shell
+docker exec -it [containerName] bash
+```
+## Dockerfile
 
 #### Dockerfile Nedir?
 
 Dockerfile, basit bir metin dosyasıdır. Uygulamaların image'ini oluşturmak için bu dosya kullanılır. **docker build** komutu ile bu dosya içerisindeki Instruction’lar (komutlar) Docker Daemon tarafından okunup adım adım çalıştırılarak image oluşturulur. Bu dosya içerisindeki her bir komut satırı bir katmana karşılık gelmektedir. Image'ler de Dockerfile’ın içerisindeki komut satırlarından yani katmanlardan oluşur. Dockerfile nasıl hazırlanır, temel olarak kullanılan komutlar nelerdir inceyelim.
 
 Container’ın base image’i yazılır, baz alınacak image.
->FROM [imageName]
-
+```dockerfile
+FROM [imageName]
+```
 Image'i oluşturan kişinin adını ya da mail adresini yazmak için kullanılır.
->MAINTAINER [name]
-
+```dockerfile
+MAINTAINER [name]
+```
 Container içerisinde kurulması ya da çalıştırılması gereken şeyler olduğunda bu kısımda yazılır, genellikle yazılım paketlerini indirmek için kullanılır
->RUN [linux komutu]
-
+```dockerfile
+RUN [linux komutu]
+```
 Host üzerindeki dosyaları veya klasörleri kaynak adresinden imaj sistemindeki hedef adrese kopyalanması sağlar.
->COPY [from_path_want_to_copy] [to_path_inside_container_for_paste]
-
+```dockerfile
+COPY [from_path_want_to_copy] [to_path_inside_container_for_paste]
+```
 Container’ın çalıştıracağı dizin yazılır, Container içerisinde belirtilen bu dizine geçiş yapılır. Eğer belirtilen dizin mevcut değilse öncelikle oluşturulur sonrasında bu dizine geçiş yapılır.
->WORKDIR [path_to_main_dir]
-
+```dockerfile
+WORKDIR [path_to_main_dir]
+```
 Container çalıştığında hangi portu dinlemesi gerektiğini bu komut aracağıyla belirtiriz.
->EXPOSE [portNumber]
-
+```dockerfile
+EXPOSE [portNumber]
+```
 Image çalıştırıldığında bu komut aracığıyla spesifik olarak verilen komutları ve parametreleri kullanarak yaşam döngüsüne devam eder.
->ENTRYPOINT ["related_run_command", "path_file_for_run"]
-
+```dockerfile
+ENTRYPOINT ["related_run_command", "path_file_for_run"]
+```
 Environment Variable (Değişken) oluşturmak için kullanılan bir komuttur. Key – Value şeklinde kullanılır, iki çeşit kullanımı vardır.
->ENV key=value
->ENV key value
-
+```dockerfile
+ENV key=value
+ENV key value
+```
 Örnek Dockerfile:
->FROM alpine<br>
-RUN apk add -update nodes nodejs-npm<br>
-COPY . /src<br>
-WORKDIR /src<br>
-EXPOSE 8080<br>
-ENTRYPOINT [“node”, “./app.js”]
-
-## 3-Volumes
+```dockerfile {.line-numbers}
+FROM alpine
+RUN apk add -update nodes nodejs-npm
+COPY . /src
+WORKDIR /src
+EXPOSE 8080
+ENTRYPOINT ["node", "./app.js"]
+```
+## Volumes
 Volume’lar lokaldeki klasörü, container içerisindeki bir mantıksal klasör ile eşler. Container’larda kalıcı dosya saklamaya yarar.
 
 Volume oluşturur
->docker create volume [volumeName]
-
+```shell
+docker create volume [volumeName]
+```
 Volume’ları listeler
->docker volume ls
-
+```shell
+docker volume ls
+```
 Volume ile ilgili bilgi verir
->docker volume inspect [volumeName]
-
+```shell
+docker volume inspect [volumeName]
+```
 Volume siler
->docker rm [volumeName]
-
+```shell
+docker rm [volumeName]
+```
 Oluşturulan volume docker run komutunda verilebilir 
 Örnek run komutları:
->docker run -d —name testContainerName -v testVolumeName:/app testContainerName:latest
-
->docker run -d —name testContainerName -v d:/testLocalFolderForVolume:/app testContainerName:latest
-
->docker run -d —name testContainerName -v /Users/sahabt/testFolderForVolume:/app testContainerName:latest
-
-## 4-Docker Compose Komutları
+```shell
+docker run -d —name testContainerName -v testVolumeName:/app testContainerName:latest
+```
+```shell
+docker run -d —name testContainerName -v d:/testLocalFolderForVolume:/app testContainerName:latest
+```
+```shell
+docker run -d —name testContainerName -v /Users/sahabt/testFolderForVolume:/app testContainerName:latest
+```
+## Docker Compose Komutları
 
 Birden fazla container tanımlama ve çalıştırmaya yarayan bir tool. YAML formatında yazılır.
 NOT 1: bazen docker compose bazen ise docker-compose olarak kullanımı vardır.
@@ -140,100 +172,127 @@ NOT 3: bu başlık altında bahsedilen container'lar ve image'ler ilgili docker 
 NOT 4: bu komutlar docker compose yaml dosyasının bulunduğu dizinde çalıştırılmalıdır.
 
 İmage’leri build eder
->docker compose build
-
+```shell
+docker compose build
+```
 Conatiner’ları başlatır/çalıştırır.
->docker compose start
-
+```shell
+docker compose start
+```
 Container’ları durdurur.
->docker compose stop
-
+```shell
+docker compose stop
+```
 Container’ları build edip çalıştırır.
->docker compose up -d
-
+```shell
+docker compose up -d
+```
 Container’ları rebuild eder ve çalıştırır.
->docker compose up -d —build
-
+```shell
+docker compose up -d —build
+```
 Çalışan container’ları gösterir.
->docker compose ps
-
+```shell
+docker compose ps
+```
 Container’ları siler.
->docker compose rm
-
+```shell
+docker compose rm
+```
 Container’ları durdurur ve siler.
->docker compose down
-
+```shell
+docker compose down
+```
 Container’ların logunu gösterir.
->docker compose logs
-
+```shell
+docker compose logs
+```
 Container içerisine girer.
->docker compose exec [containerName/containerId] bash
-
+```shell
+docker compose exec [containerName/containerId] bash
+```
 Çalışan projeleri (daha önce çalıştırılmış docker compose projelerini) gösterir
->docker compose ls
-
+```shell
+docker compose ls
+```
 Aynı compose (port kullanımı varsa değiştirilmeli) yeni version (projenin yeni versiyonu) olarak yayınlanabilir. Ardından docker compose ls ile yeni isimle yayınlanan yeni versiyon da proje olarak görülebilir.
->docker compose -p [newVersionName] up -d
-
+```shell
+docker compose -p [newVersionName] up -d
+```
 Yayınlanan yeni versiyon ismiyle birlikte down edilebilir.
->docker compose -p [versionName] down
-
-## 5-Docker Compose YAML Komutları
+```shell
+docker compose -p [versionName] down
+```
+## Docker Compose YAML Komutları
 
 Servislerin yazılacağı kısmın başlığıdır.
->services:
-
+```yaml
+services:
+```
 Services altında bulunan servislerin adıdır.
->test_app_name:
-
+```yaml
+test_app_name:
+```
 Pull edilecek image bu kısımda verilir. (Servisin altında)
->image: mariadb:10.6.4-focal
-
+```yaml
+image: mariadb:10.6.4-focal
+```
 Container (servis) oluşmadan önce çalışacak komutlar yazılır
->command: npm install
-
+```yaml
+command: npm install
+```
 Sunucu ya da container’ların koştuğu makine restart olduğunda ya da kapatılıp açıldığında servislerin tekrar çalıştırılmasını ya da çalışmamasını belirlediğimiz kısımdır.
 Aynı zamanda hataya düştüğünde tekrar çalıştırılsın ya da durdurulmadığı sürece çalışsın şeklinde seçenekler de mevcut.
->restart: always (Container'lar hangi şartlarda durursa dursun restart eder.)<br>
-restart: no (Container'lar otomatik olarak yeniden başlamaz.)<br>
-restart: on-failure (Container sıfırdan farklı bir return ile çıktıysa ve maksimum deneme sayısı geçilmediyse container'ı restart eder.)<br>
+```yaml
+restart: always (Container'lar hangi şartlarda durursa dursun restart eder.)
+restart: no (Container'lar otomatik olarak yeniden başlamaz.)
+restart: on-failure (Container sıfırdan farklı bir return ile çıktıysa ve maksimum deneme sayısı geçilmediyse container'ı restart eder.)
 restart: unless-stopped (Container, kullanıcı ya da docker daemon tarafından durdurulmadıysa restart eder.)
-
+```
 Alt kısımda belirtilen servis üzerinde çalışmasını gerektiğini belirtir, önce belirtilen servis ayağa kalkar.
->depends_on:<br>
+```yaml
+depends_on:
   - db
-
-Değişken tanımlayabildiğimiz, değer atayabildiğimiz ve compose ile servisleri ayağa kaldırırken “docker compose up -d -e DEBUG=0“ şeklinde dışarıdan parametre geçebilmemizi sağlar.
->environment:<br>
-  - DEBUG=1<br>
+```
+Değişken tanımlayabildiğimiz, değer atayabildiğimiz ve compose ile servisleri ayağa kaldırırken "docker compose up -d -e DEBUG=0" şeklinde dışarıdan parametre geçebilmemizi sağlar.
+```yaml
+environment:
+  - DEBUG=1
   - TESTENV=testValue
-
+```
 Servisin çalışacağı portun ve dışarıdan ulaşılacak portun belirlediği kısım (sol taraftaki dışarıdan ulaşacağımız port, sağ taraftaki de container'ın uygulamasının çalışacağı port numarasıdır).
->ports:<br>
-  - “8080:80”
-
+```yaml
+ports:
+  - "8080:80"
+```
 2 kısımda kullanılabilir, bir servis altında ilgili servisin hangi network’de çalışması isteniyorsa ilgili network adı verilerek, bir de services altında network’leri tanımlamak amacıyla
 Servis altında kullanımı;
->networks:<br>
+```yaml
+networks:
   - frontend
-
+```
 Services altında kullanımı (network tanımlama);
->networks:<br>
-  frontend:<br>
+```yaml
+networks:
+  frontend:
   backend:
-
+```
 2 kısımda kullanılabilir, bir servis altında ilgili serviste bir volume ataması (mapping) yapılmak isteniyorsa ilgili volume adı verilerek, bir de services altında volume’leri tanımlamak amacıyla
 Servis altında kullanımı;
->volumes:(lokal yol belirterek volume ataması)<br>
-  - ./db:/etc/data<br>
-volumes:(tanımlanmış bir volume ataması)<br>
+```yaml
+#(lokal yol belirterek volume ataması)
+volumes:
+  - ./db:/etc/data
+#(tanımlanmış bir volume ataması)
+volumes:
   - db-data:/etc/data
-
+```
 Services altında kullanımı (volume tanımlama);
->volumes:<br>
+```yaml
+volumes:
   db-data:
-
-## 6-Contariner Registry ve DockerHub
+```
+## Contariner Registry ve DockerHub
 
 #### Container Registry Nedir?
 
@@ -243,23 +302,28 @@ Varsayılan depo DockerHub'dır.
 AWS, GCP ve Azure, Container Registry'i servis olarak sunar.
 
 İlk olarak konsoldan docker hub'a login olmak gerekir
->docker login -u [username] -p [password]
-
+```shell
+docker login -u [username] -p [password]
+```
 Önceden build edilmiş projeye etiket ekleme
->docker tag [tagName] [username]/[imageName]:latest
-
+```shell
+docker tag [tagName] [username]/[imageName]:latest
+```
 Docker Hub'a image pushlama
->docker push [username]/[imageName]:latest
-
+```shell
+docker push [username]/[imageName]:latest
+```
 Docker Hub'dan image çekme
->docker pull [imageName]:latest
-
+```shell
+docker pull [imageName]:latest
+```
 Docker Hub Örnek Pushlama;
->docker build -t csancaktar/express:v1 .<br>
-docker push csancaktar/express:v1<br>
-docker rmi csancaktar/express:v1<br>
+```shell
+docker build -t csancaktar/express:v1 .
+docker push csancaktar/express:v1
+docker rmi csancaktar/express:v1
 docker pull csancaktar/express:v1
-
+```
 # Kubernetes (K8s)
 
 Sıkça "buluta yönelik işletim sistemi" olarak tanımlanan Kubernetes, containerize edilmiş uygulama ve hizmet kümelerini yönetmek amacıyla tasarlanmış, açık kaynaklı bir platformdur. Google tarafından GO dilinde geliştirilmiş Cloud Native Computing Foundation tarafından desteklenen mevcut konteyner haline getirilmiş uygulamalarınızı otomatik deploy etmek, sayılarını arttırıp azaltmak gibi işlemler ile birlikte yönetmenizi sağlayan bir Konteyner kümeleme (container cluster) aracıdır. Master (Control Plane) ve Nodes (Workers) yapısı vardır. 
@@ -322,32 +386,41 @@ Kubernetes sisteminde ki en atomik computing birimi Podlardır. Bunları sanalla
 ### Pod Komutları
 
 YAML dosyası hazırlanmış bir Pod yaratır
->kubectl creafe -f [podName.yml/podName.yaml]
-
+```shell
+kubectl creafe -f [podName.yml/podName.yaml]
+```
 İsmi ve image'i yazılan pod'u çalıştırır, ve 3600 sanite uyutur
->kubectl run [podName] --image=[imageName] -- /bin/sh -c "sleep 3600"
-
+```shell
+kubectl run [podName] --image=[imageName] -- /bin/sh -c "sleep 3600"
+```
 Pod’ları namespace bilgileriyle beraber listeler
->kubectl get pods -A
-
+```shell
+kubectl get pods -A
+```
 İsmi yazılan pod'un yaml dosyasını son parametrede yolu ve adı bulunan yaml dosyasına kaydeder (export işlemi).
->kubectl get pod [podName] -o yaml > file.yaml
-
+```shell
+kubectl get pod [podName] -o yaml > file.yaml
+```
 Yazılan namespace altındaki podları listeler
->kubectl get pods -n [namespaceName]
-
+```shell
+kubectl get pods -n [namespaceName]
+```
 Pod’ların bilgilerini listeler
->kubectl get pods -o wide
-
+```shell
+kubectl get pods -o wide
+```
 İsmi yazılan pod hakkında bilgiler getirir
->kubectl describe pod [podName]
-
+```shell
+kubectl describe pod [podName]
+```
 İsmi yazılan podu siler
->kubectl delete pod [podName]
-
+```shell
+kubectl delete pod [podName]
+```
 İsmi yazılan pod'un içerisine girer(sh ya da bash)
->kubectl exec -it [podName] -- sh/bash
-
+```shell
+kubectl exec -it [podName] -- sh/bash
+```
 ## Init Containers
 
 Declarative yaml içerisinde bulunur, Pod'lar oluşmadan önce init containerlar oluşur ve Pod'ların ayağa kalkabilmesi için gerekli bağlantı testi vb. kontrolleri sağlarlar. [Init Containers] içerisinde örnek kullanımı mevcuttur.
@@ -365,18 +438,22 @@ Pod'lar içerisinde birden fazla container kullanımı da mevcuttur. [Multi Cont
 Pod'ların replica larını oluşturur (yaml içerisinde 3 replica bilgisi verildiyse, aynı anda Pod'dan 3 adet oluşur), herhangi bir pod crash olup ya da herhangi bir sebepten dolayı durduğunda, silindiğinde replicaset sayesinde K8S tarafından otomatik olarak yeniden oluşturulur.
 
 ReplicaSet yaratır
->kubectl apply -f [definition.yaml]
-
+```shell
+kubectl apply -f [definition.yaml]
+```
 ReplicaSet'leri gösterir
->kubectl get rs
-
+```shell
+kubectl get rs
+```
 ReplicaSet hakkında bilgi verir
->kubectl describe rs [replicaSetName]
-
+```shell
+kubectl describe rs [replicaSetName]
+```
 Silme komutu, birisi yaml adı parametresiyle diğeri de replicaSet name parametresiyle
->kubectl delete -f [definition.yaml]<br>
+```shell
+kubectl delete -f [definition.yaml]
 kubectl delete rs [replicaSetName]
-
+```
 ## Deployments
 
 Deployment ReplicaSet’in yanında rolling update yapma imkanı veren ilgili podu ve replica sayılarını belirttiğimiz bir Kubernetes objesidir. Deployment oluşturduğunda, arka planda replicaset oluşturur fakat bu replicaset'lerle direkt olarak etkileşimde bulunulamaz. Birden fazla ReplicaSet kullanabildiği için de rolling update yapma şansına sahiptir. Aynı şekilde bir önceki versiyona rollback yapma imkanı da verir. Her Mikroservis için bir deployment oluşturulur. Örnek olarak 3 replica’lı bir deploymenti 5 replicaya da çıkartabiliriz ya da 2 replicaya da düşürebiliriz. Hatta çeşitli metrikler dinleyerek auto-scaling yeteneği de kazandırabiliriz.
@@ -384,34 +461,43 @@ Rolling update için örnek kullanım [RollingUpdate] kısmında verilmiştir.
 Blue-Green deployment senaryosu için örnek kullanım [Blue-Green Deployment] kısmında verilmiştir.
 
 Imperative ve Declarative deploy oluşturma
->kubectl create deploy [deploymentName] --image=[imageName] --replicas=3 --port=80<br>
+```shell
+kubectl create deploy [deploymentName] --image=[imageName] --replicas=3 --port=80
 kubectl apply -f [definition.yaml]
-
+```
 Deployment'ları listeler
->kubectl get deploy
-
+```shell
+kubectl get deploy
+```
 İsmi yazılan deployment hakkında bilgi verir
->kubectl describe deploy [deploymentName]
-
+```shell
+kubectl describe deploy [deploymentName]
+```
 Replicaset'leri listeler
->kubectl get rs
-
+```shell
+kubectl get rs
+```
 Deployment'a yapılan güncellemenin durumunu gösterir
->kubectl rollout status
-
+```shell
+kubectl rollout status
+```
 İsmi yazılan deployment'ın geçmiş bilgilerini getirir. (geçmiş updateler vb.)
->kubectl rollout history deployment [deploymentName]
-
+```shell
+kubectl rollout history deployment [deploymentName]
+```
 İsmi yazılan deployment'a yapılan update'i geri almak için kullanılır
->kubectl rollout undo [deploymentName]
-
+```shell
+kubectl rollout undo [deploymentName]
+```
 İsmi yazılan deployment'ı parametre olarak geçilen revizyona geri almak için kullanılır
->kubectl rollout undo [deploymentName] --to-revision=[revision]
-
+```shell
+kubectl rollout undo [deploymentName] --to-revision=[revision]
+```
 Deploymentları yaml ismi ya da deployment ismi yazarak kaldırır
->kubectl delete -f [definition.yaml]<br>
+```shell
+kubectl delete -f [definition.yaml]
 kubectl delete deploy [deploymentName]
-
+```
 ## DeamonSet
 
 DeamonSet'ler tanımlandığında yaml'da belirtilen podu, tüm node'larda ya da selector ile seçilmiş belirli node'larda ayağa kaldırır, bu selector'e dahil olacak şekilde yeni bir node eklendiğinde bu pod otomatik olarak orada da ayağa kalkacaktır. Tolerans ile master node harici tüm nodlarda çalış şeklinde konfigürasyon verilebilir. Örnek kullanımı [DeamonSet] kısmında mevcuttur.
@@ -438,31 +524,45 @@ ClusterIP K8S'de varsayılan servistir. Cluster içerisinden erişim sağlanabil
 NodePort ClusterIP'den türetilmiştir. ClusterIP'ye göre daha fonksiyoneldir. Cluster içerisinden ve dışarıdan erişim sağlanabilir. ClusterIP'deki gibi port ve targetPort bilgileri vardır bunlara ekstra olarak nodePort ve protocol bilgisi de tanımlamak gerekir. NodePort bilgisi cluster dışından erişim için kullanılacak port bilgisini içermelidir. Statik olarak tanımlanmadığı takdirde K8S otomatik olarak bir tanımlama gerçekleştirir. 30000 ile 32767 arasında tanımlanmalıdır. Node'ların public ip adresleri olmak zorundadır. Node IP + nodePort ile servise dışarıdan erişim sağlanabilir. Örnek kullanım [NodePort] kısmında verilmiştir.
 
 Bir podu dışarıya açmak için servis oluşturur
->kubectl expose po [podName] --port=[portNumber] --target-port=[targetPortNumber] --type=NodePort
-
+```shell
+kubectl expose po [podName] --port=[portNumber] --target-port=[targetPortNumber] --type=NodePort
+```
 Bir deployment'ı dışarıya açmak için servis oluşturur
->kubectl expose deploy [deployName] --port=[portNumber] --target-port=[targetPortNumber] --type=NodePort --name frontend
-
+```shell
+kubectl expose deploy [deployName] --port=[portNumber] --target-port=[targetPortNumber] --type=NodePort --name frontend
+```
 İsmi yazılan yaml dosyasındaki servisi deploy eder
->kubectl apply -f [definition.yaml]
-
+```shell
+kubectl apply -f [definition.yaml]
+```
 Servislerin listesini getirir
->kubectl get svc
-
+```shell
+kubectl get svc
+```
 Servislerin listesini ekstra bilgilerle getirir
->kubectl get svc -o wide
-
+```shell
+kubectl get svc -o wide
+```
 Servis hakkında bilgi verir
->kubectl describe svc [serviceName]
-
+```shell
+kubectl describe svc [serviceName]
+```
 Yaml dosyasından deploy edilmiş servisi siler
->kubectl delete -f [definition.yaml]
-
+```shell
+kubectl delete -f [definition.yaml]
+```
 İsmi yazılan servisi siler
->kubectl delete svc [serviceName]
-
+```shell
+kubectl delete svc [serviceName]
+```
 ### LoadBalancer
-LoadBalancer aslında bulut sürümlerine has bir servis. Örnek kullanım [LoadBalancer] kısmında verilmiştir.
+LoadBalancer aslında bulut sürümlerine has bir servistir. Bir servisi internete sunmanın standart yoludur. Harici yük dengeleyicilerini (external load balancers) destekleyen bulut sağlayıcılarda bu tipi ayarladığımızda servis için bir yük dengeleyicisi sağlarlar. Örnek kullanım [LoadBalancer] kısmında verilmiştir.
+
+### ExternalName
+ExternalName tipi servisler, tipik bir selector ile değil bir DNS adı ile eşleşirler. Bu eşleşmeyi spec.externalName alanında belirtiriz. Port'ları veya endpoint'leri de tanımlanmaz. Bir alias'ın external bir servise döndürülmesi gibi düşünülebilir.
+
+### Ingress
+Bu kavramların yanında sıkça duyulan ingress yukarıdakiler gibi bir kubernetes servis tipi değildir. Ingress gelen isteklerin servislerimize erişebilmesini sağlayan kurallar bütünüdür. Controller yapılandırmaları ile birden çok servisin önünde durur ve cluster'da bir akıllı yönlendirici veya giriş noktası (entrypoint) görevi görür.
 
 ## Volumes
 
@@ -473,7 +573,7 @@ Persistant Volume Claim (**PVC**):
 PVC'ler PV'ler ile bire bir eşleşirler, PV talep ederler. Bir ya da daha fazla pod PVC'leri kullanabilir. Pod'lar içerisindeki tüm container'lar aynı volume'u paylaşırlar.
 
 Birçok PV plugini vardır:
-[PV Plugin'leri(Görsel)](/getting-started/docker-kubernetes-temelleri/Assets/pvPlugins.png)
+[PV Plugin'leri(Görsel)](https://github.com/chainerist/getting-started/blob/main/docker-kubernetes-temelleri/Assets/pvPlugins.png)
 
 Sarı ile üstü çizili olan HostPath (PV) tek bir node tarafından test amaçlı kullanılır, dosyaları herhangi bir bulut ortamını kullanmadan lokal ortamda saklar.
 
@@ -496,83 +596,106 @@ Dinamik olarak tanımlanmak istendiğinde sarı ile üstü çizili olmayanlardan
 
 PV,SC ve PVC Cheat Sheet;
 PV,SC ve PVC tanımlamak için kullanılır
->kubectl applf -f [definition.yaml]
-
+```shell
+kubectl applf -f [definition.yaml]
+```
 PV'leri listeler
->kubectl get pv
-
+```shell
+kubectl get pv
+```
 SC'leri listeler
->kubectl get sc
-
+```shell
+kubectl get sc
+```
 PVC'leri listeler
->kubectl get pvc
-
+```shell
+kubectl get pvc
+```
 İsmi yazılan PV hakkında bilgi verir
->kubectl describe pv [pvName]
-
+```shell
+kubectl describe pv [pvName]
+```
 İsmi yazılan SC hakkında bilgi verir
->kubectl describe sc [scName]
-
+```shell
+kubectl describe sc [scName]
+```
 İsmi yazılan PVC hakkında bilgi verir
->kubectl describe pvc [pvcName]
-
+```shell
+kubectl describe pvc [pvcName]
+```
 Yaml dosyası ismi yazılan PV,SC ya da PVC'leri siler
->kubectl delete -f [definition.yaml]
-
+```shell
+kubectl delete -f [definition.yaml]
+```
 İsmi yazılan PV'yi siler
->kubectl delete pv [pvName]
-
+```shell
+kubectl delete pv [pvName]
+```
 İsmi yazılan SC'yi siler
->kubectl delete sc [scName]
-
+```shell
+kubectl delete sc [scName]
+```
 İsmi yazılan PVC'yi siler
->kubectl delete pvc [pvcName]
-
+```shell
+kubectl delete pvc [pvcName]
+```
 ## ConfigMaps
 
 Configmap, uygulamalarımızda kullandığımız konfigürasyonların dışarıda bir noktaya konularak tek noktadan kolayca yönetilmesine olanak sağlayan bir kubernetes objesidir. Key-Value yapısıyla çalışır. Yaml dosyaları ya da text dosyaları olarak ya da dosyalama (klasörler ve dosyalar) sistemi olarak oluşturulabilir. ConfigMap dosyalarında, herhangi bir değişiklik yapıldığında, container'lar restart edilene kadar değişikikler uygulanmaz. Örnek volume kullanımı [ConfigMaps] kısmında verilmiştir.
 
 Imperative yol ile configmap oluşturma
->kubectl create configmap literal-example --from-literal="city=Istanbul" --from-literal=state=Kadıköy
-
+```shell
+kubectl create configmap literal-example --from-literal="city=Istanbul" --from-literal=state=Kadıköy
+```
 Declarative yol ile configmap oluşturma
->kubectl apply -f [cm.yaml]
-
+```shell
+kubectl apply -f [cm.yaml]
+```
 Dosyadan çekerek configmap oluşturma
->kubectl create cm [name] --from-file=myconfig.txt
-
+```shell
+kubectl create cm [name] --from-file=myconfig.txt
+```
 Klasörden çekerek configmap oluşturma
->kubectl create cm [name] --from-file=config/
-
+```shell
+kubectl create cm [name] --from-file=config/
+```
 Configmap'leri listeler
->kubectl get cm
-
+```shell
+kubectl get cm
+```
 İsmi yazılan configmap'i bir yaml dosyasına kaydeder
->kubectl get cm [name] -o YAML
-
+```shell
+kubectl get cm [name] -o YAML
+```
 İsmi yazılan configmap'i siler
->kubectl delete -f [cm.yaml]
-
+```shell
+kubectl delete -f [cm.yaml]
+```
 ## Secrets
 
 Parola, kullanıcı adı, token gibi bilgileri güvenli bir şekilde depolayacağınız alan Secret’tır. Burada depoladığımız bilgilere verdiğimiz isimle uygulamamız içinde kullanabiliriz. Secret ConfigMaps'e benzer ancak özel olarak gizli verileri tutmayı amaçlar. Hem ConfigMaps hem de Secret, verileri bir anahtar değer (key, value) çifti olarak depolar. En önemli fark, Secret’ın verileri base64 biçiminde depolamasıdır, ConfigMaps'in ise verileri düz metin olarak depolamasıdır. Anahtarlar, parolalar, hizmet hesapları kimlik bilgileri, db bağlantı dizesi vb. gibi bazı kritik verileriniz varsa, her zaman Secret’ı tercih etmelisiniz. Örnek volume kullanımı [Secrets] kısmında verilmiştir.
 
 Imperative yol ile secret oluşturma
->kubectl create secret generic [secretName] --from-literal=STATE=Kadıköy
-
+```shell
+kubectl create secret generic [secretName] --from-literal=STATE=Kadıköy
+```
 Declarative yol ile secret oluşturma
->kubectl apply -f [secret.yaml]
-
+```shell
+kubectl apply -f [secret.yaml]
+```
 Secret'ları listeler
->kubectl get secrets
-
+```shell
+kubectl get secrets
+```
 İsmi yazılan secret'ı getirir
->kubectl get secrets [secretName] -o YAML
-
+```shell
+kubectl get secrets [secretName] -o YAML
+```
 İsmi yazılan ya da yaml dosyası yazılan secret'ı siler
->kubectl delete -f [secret.yaml]<br>
+```shell
+kubectl delete -f [secret.yaml]
 kubectl delete secrets [secretName]
-
+```
 ## Probes
 
 Podların  durumlarını takip edebilmek için kullanılan yapı.
